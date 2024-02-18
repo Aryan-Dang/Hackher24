@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import axios from 'axios';
 
 function FileUpload() {
   const [file, setFile] = useState(null);
@@ -19,17 +18,26 @@ function FileUpload() {
     formData.append('file', file);
     console.log("FILE UPLOAD SUCCESSFUL!");
 
-    try {
-      const response = await axios.post('YOUR_BACKEND_ENDPOINT/upload', formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-      });
+    fetch('http://localhost:3000/upload', {
+      method: 'POST',
+      body: formData,
+    })
+    .then(response => response.text())
+    .then(result => console.log(result))
+    .catch(error => console.error('Error:', error));
 
-      setDownloadLink(response.data.downloadLink);
-    } catch (error) {
-      console.error("Error uploading file: ", error);
-    }
+    // try {
+    //   const response = await axios.post('YOUR_BACKEND_ENDPOINT/upload', formData, {
+    //     headers: {
+    //       'Content-Type': 'multipart/form-data',
+    //     },
+    //   });
+
+    //   setDownloadLink(response.data.downloadLink)
+
+    // } catch (error) {
+    //   console.error("Error uploading file: ", error);
+    // }
   };
 
   return (
